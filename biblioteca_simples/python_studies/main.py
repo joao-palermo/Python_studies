@@ -20,12 +20,14 @@ books = [
 loans = [
     {"user" : "joao", "book" : "Star wars", "returned" : True},
     {"user" : "Zuan", "book" : "Sons of Dune", "returned" : False},
+    {"user" : "joao", "book" : "Dune", "returned" : False}
 ]
 
 #===============================================================================================================
 # Cadastro de usuários
 def users_register():
-
+    
+    print("=== Regitre sua Conta ===")
     print("qual é o seu nome?")
     name_user = input()
     
@@ -33,8 +35,9 @@ def users_register():
         if i["name_user"] == name_user:
             print("xxxxxx Essa conta já existe! xxxxxx")
             return
-        
-    password = input("digite sua senha")
+    
+    print("Digite sua senha: ")    
+    password = input(" ")
     
     print("tipo de conta:")
     print("1 = leitor")
@@ -69,9 +72,30 @@ def do_login():
 
 
 #===============================================================================================================
-# Login
+# Registrar livro
 
-users_register()
+def book_register():
+    
+    print("=== Registro de Livros ===")
+    print("=== Digite o nome do livro ===")
+    Name_book = input(" ")
+    
+    for i in books:
+        if i ["name_book"] == Name_book:
+            print("xxx Esse livro já existe na nossa biblioteca")
+            return
+        
+    print("Digite a categoria do livro ")    
+    Book_category = input(" ")
+    
+    New_Book = {"name_book" : Name_book, "category" : Book_category, "available" : True}
+    books.append(New_Book)
+    print(f"Livro '{Name_book}', cadastrado com sucesso!")
+    
 
-print(f"Usuários cadastrados: {users}")
+book_register()
+
+print(books)
+
+
 
