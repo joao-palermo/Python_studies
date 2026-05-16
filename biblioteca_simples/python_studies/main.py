@@ -24,8 +24,9 @@ loans = [
     {"user" : "joao", "book" : "Dune", "returned" : True}
 ]
 
+
 #===============================================================================================================
-# Cadastro de usuários
+# Cadastro de usuários 1
 
 def Users_register():
     
@@ -58,24 +59,33 @@ def Users_register():
     users.append(new_user)
     print(f"Usuario '{name_user}', cadastrado com sucesso!")
     
+    global current_user
+    current_user = new_user
+    
+    Menu()
+
 #===============================================================================================================
-# Login
+# Login 2
 
 def Do_login():
     print("=== LOGIN ===")
-    name = input("Digite seu nome: ").strip()
+    name1 = input("Digite seu nome: ").strip()
     password1 = input("Digite sua senha ").strip()
     
     for i in users:
-        if i["name_user"] == name and i["password"] == password1:
+        if i["name_user"] == name1 and i["password"] == password1:
             print(f"Bem-vindo, {i['name_user']}!")
-            return i
-    
-    print("Nome ou senha incorretos")
-
+            
+            global current_user
+            current_user = i
+            Menu()
+            return 
+            
+    print("xxx Nome de usuário ou senha incorretos! xxx")
+            
 
 #===============================================================================================================
-# Registrar livro
+# Registrar livro 1
 
 def Book_register():
     
@@ -94,9 +104,11 @@ def Book_register():
     New_Book = {"name_book" : Name_book, "category" : Book_category, "available" : True}
     books.append(New_Book)
     print(f"Livro '{Name_book}', cadastrado com sucesso!")
+    
+    return Menu()
 
 #===============================================================================================================
-# Pesquisar Livro e pesquisar categoria
+# Pesquisar Livro e pesquisar categoria 2
 
 def Search_book():
     print("=== Pesquisa de livros ===")
@@ -116,19 +128,103 @@ def Search_category():
     for i in books:
         if i["category"] == Search:
             print(f"{i['name_book']} - Categoria: {i['category']} - Disponível: {'Sim' if i['available'] else 'Não'}")
+            
+    return Menu()
 
 #===============================================================================================================
-# Registrar emprestimo
+# Registrar emprestimo 3
 
-#def Loan_register():
-#    print("=== Empretimos de livros===")
-#    print("Digite o nome do livro que vc quer pegar empretado")
-#    loan_book = input(" ")
-#    
-#    for i in books and i["available"] == True:
-#        if i["name_book"] == loan_book:
-#            print()(f"Livro '{i['name_book']}' emprestado com sucesso!")
-#        else:
-#            print("xxx Livro indisponível para empréstimo xxx")
-#            return
-#            
+def Loan_register():
+    print("=== Empretimos de livros===")
+    print("Digite o nome do livro que vc quer pegar empretado")    
+    loan_book = input(" ")
+    
+    for i in books:
+        if i["name_book"] == loan_book:
+            i["available"] = False
+            new_loan = {"user" : current_user["name_user"], "book" : loan_book, "returned" : False}
+            loans.append(new_loan)
+            print(f"Livro '{loan_book}' emprestado com sucesso para {current_user['name_user']}!")
+            return
+            
+    print("xxx Desculpe, esse livro não está disponível no momento. xxx")
+    return Menu()
+     
+#===============================================================================================================
+# Devolver livro 
+
+def Return_book():
+    print("=== Devolução de livros ===")
+    print("Digite o nome do livro que vc quer devolver")
+    return_book = input(" ")
+    
+    for i in loans:
+        if i["user"] == current_user["name_user"] and i["book"] == return_book and not i["returned"]:
+            i["returned"] = True
+            for j in books:
+                if j["name_book"] == return_book:
+                    j["available"] = True
+                    print(f"Livro '{return_book}' devolvido com sucesso por {current_user['name_user']}!")
+                    return
+    print("xxx Você não tem esse livro emprestado ou já o devolveu. xxx")
+    return Menu()
+    
+#===============================================================================================================
+#Main
+def Menu():
+    if current_user["profile"] == "reader":
+        while True:
+            print(" === BIBLIOTECA SIMPLES ===")
+            print("1 - Pesquisar livro")
+            print("2 - Pesquisar categoria")
+            print("3 - Registrar empréstimo")
+            print("4 - Registrar devolução")
+            print("5 - Sair")
+            
+            option = input("Escolha: ")
+            if option == "1":
+                Search_book()   
+            elif option == "2":
+                Search_category()
+            elif option == "3":
+                Loan_register()
+            elif option == "4":
+                Return_book()
+            elif option == "5":
+                print("Saindo do programa...")
+                break
+            else:
+                print("Opção inválida. Tente novamente.")
+
+    elif current_user["profile"] == "librarian":
+        while True:
+            print(" === BIBLIOTECA SIMPLES ===")
+            print("1 - Registrar livro")
+            print("2 - ")
+            print("3 - ")
+            print("4 - Sair")
+
+#===============================================================================================================
+#Main
+
+def main():
+    while True:
+        print("=== BIBLIOTECA SIMPLES ===")
+        print("1 - Registrar usuário")
+        print("2 - Login")
+        print("3 - Sair")
+        
+        option = input("Escolha: ")
+        
+        if option == "1":
+            Users_register()
+        elif option == "2":
+            Do_login()
+            Menu()
+        elif option == "3":
+            print("Saindo do programa...")
+            break
+        else:
+            print("Opção inválida. Tente novamente.")
+            
+main()
