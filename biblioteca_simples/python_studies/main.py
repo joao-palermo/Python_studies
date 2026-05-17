@@ -108,7 +108,7 @@ def Book_register():
     return Menu()
 
 #===============================================================================================================
-# Pesquisar Livro e pesquisar categoria 2
+# Pesquisar Livro e pesquisar categoria 2 e 3
 
 def Search_book():
     print("=== Pesquisa de livros ===")
@@ -168,6 +168,16 @@ def Return_book():
                     return
     print("xxx Você não tem esse livro emprestado ou já o devolveu. xxx")
     return Menu()
+
+#===============================================================================================================
+# Ver emprestimos
+
+def View_loans():
+    print("=== Empréstimos atuais ===")
+    for i in loans:
+        if i["returned"] == False:
+            print(f"Usuário: {i['user']} - Livro: {i['book']}")
+    return Menu()
     
 #===============================================================================================================
 #Main
@@ -192,17 +202,33 @@ def Menu():
                 Return_book()
             elif option == "5":
                 print("Saindo do programa...")
-                break
+                return main()
             else:
                 print("Opção inválida. Tente novamente.")
 
     elif current_user["profile"] == "librarian":
         while True:
             print(" === BIBLIOTECA SIMPLES ===")
-            print("1 - Registrar livro")
-            print("2 - ")
-            print("3 - ")
-            print("4 - Sair")
+            print("1 - Pesquisar livro")
+            print("2 - Pesquisar categoria")
+            print("3 - Registrar livro")
+            print("4 - Ver empréstimos")
+            print("5 - Sair")
+            
+            opition = input("Escolha: ")
+            if opition == "1":
+                Search_book()
+            elif opition == "2":
+                Search_category()
+            elif opition == "3":
+                Book_register()
+            elif opition == "4":
+                View_loans()
+            elif opition == "5":
+                print("Saindo do programa...")
+                return main()
+            else:
+                print("Opção inválida. Tente novamente.")
 
 #===============================================================================================================
 #Main
